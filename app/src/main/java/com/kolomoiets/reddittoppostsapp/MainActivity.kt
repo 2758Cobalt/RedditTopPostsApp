@@ -1,15 +1,18 @@
 package com.kolomoiets.reddittoppostsapp
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cobaltumapps.reddittoppostsappblank.retrofit.posts.data.PostResponse
 import com.kolomoiets.reddittoppostsapp.adapters.redditPosts.RedditPostListAdapter
+import com.kolomoiets.reddittoppostsapp.adapters.redditPosts.ViewHolderPostListener
 import com.kolomoiets.reddittoppostsapp.data.RedditPostData
 import com.kolomoiets.reddittoppostsapp.databinding.ActivityMainBinding
-import com.kolomoiets.reddittoppostsapp.retrofit.posts.RedditPostManager
 import com.kolomoiets.reddittoppostsapp.retrofit.posts.data.RedditPostParams
 import com.kolomoiets.reddittoppostsapp.retrofit.posts.data.subdata.RedditApiTime
 import kotlinx.coroutines.CoroutineScope
@@ -37,6 +40,22 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = postAdapter
         }
+
+        binding.recyclerViewMain.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                if (!recyclerView.canScrollVertically(1)) {
+                    Log.i(LOG_TAG, postAdapter.getLastItemId())
+                    loadData(
+                        RedditPostParams(
+                        afterNameId = postAdapter.getLastItemId(),
+                        time = RedditApiTime.week
+                    )
+                    )
+                }
+            }
+        })
 
         if (savedInstanceState == null) {
             loadData()
