@@ -94,7 +94,7 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
             postListData.add(
                 RedditPostData(
                     item.data.name,
-                    item.data.author,
+                    item.data.subreddit_name_prefixed,
                     item.data.title,
                     item.data.created_utc,
                     item.data.thumbnail,
