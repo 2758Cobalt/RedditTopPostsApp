@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.cobaltumapps.reddittoppostsappblank.retrofit.posts.data.PostResponse
 import com.kolomoiets.reddittoppostsapp.RedditTimeFormatter
 import com.kolomoiets.reddittoppostsapp.data.RedditPostData
 import com.kolomoiets.reddittoppostsapp.databinding.ItemRedditPostBinding
@@ -69,9 +70,18 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
         holder.bind(postItem)
     }
 
-    fun addItemListData(newItemList: List<RedditPostData>) {
-        for (item in newItemList) {
-            postListData.add(item)
+    fun addItemToListAdapter(postResponse: PostResponse) {
+        for (item in postResponse.data.children) {
+            postListData.add(
+                RedditPostData(
+                    item.data.name,
+                    item.data.author,
+                    item.data.title,
+                    item.data.created_utc,
+                    item.data.thumbnail,
+                    item.data.num_comments
+                )
+            )
             notifyItemInserted(postListData.lastIndex)
         }
 
