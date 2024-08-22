@@ -69,6 +69,24 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
         holder.bind(postItem)
     }
 
+    fun addItemListData(newItemList: List<RedditPostData>) {
+        for (item in newItemList) {
+            postListData.add(item)
+            notifyItemInserted(postListData.lastIndex)
+        }
+
+        notifyListAdapter()
+
+    }
+
+    private fun notifyListAdapter() {
+        this.submitList(postListData)
+    }
+
+    fun getLastItemId(): String {
+        return postListData[postListData.lastIndex].id
+    }
+
     companion object {
         const val LOG_TAG = "RecyclerViewDebugTag"
     }
