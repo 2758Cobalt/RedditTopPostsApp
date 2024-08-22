@@ -1,6 +1,7 @@
 package com.kolomoiets.reddittoppostsapp.adapters.redditPosts
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -44,7 +45,7 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
                         .load(thumbnailUrl)
                         .into(postThumbnail, object : Callback {
                             override fun onSuccess() { postThumbnailCard.isVisible = true }
-                            override fun onError(e: Exception?) { }
+                            override fun onError(e: Exception?) { postThumbnailCard.isVisible = false }
                         })
 
                     postCreatedTime.text = timeFormatter.formatTime(createdTime)
@@ -54,7 +55,7 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
         }
     }
 
-    // Setup RedditPostListener
+    // Setup ViewHolderPostListener
     fun setNewListener(listener: ViewHolderPostListener) {
         this.redditPostListener = listener
     }
@@ -70,6 +71,10 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
         holder.bind(postItem)
     }
 
+    fun setNewItemsList(newList: MutableList<RedditPostData>) {
+        postListData = newList
+        notifyListAdapter()
+    }
     fun addItemToListAdapter(postResponse: PostResponse) {
         for (item in postResponse.data.children) {
             postListData.add(
@@ -91,6 +96,10 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
 
     private fun notifyListAdapter() {
         this.submitList(postListData)
+    }
+
+    fun getList(): MutableList<RedditPostData> {
+        return postListData
     }
 
     fun getLastItemId(): String {
