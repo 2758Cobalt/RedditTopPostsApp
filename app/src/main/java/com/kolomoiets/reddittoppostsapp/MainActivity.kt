@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity(), ViewHolderPostListener {
     private var picassoImageSaver = PicassoImageSaver(this)
 
     private val LIST_STATE_KEY = "reddit_post_list_state"
+    private val LOAD_STATE_KEY = "reddit_load_data_state"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,8 +80,15 @@ class MainActivity : AppCompatActivity(), ViewHolderPostListener {
         }
         // Завантаження збереженого списку елементів і застовування їх у RecyclerView
         else {
-            val savedRedditPosts =  savedInstanceState.getParcelableArrayList<RedditPostData>(LIST_STATE_KEY)?.toMutableList() ?: mutableListOf<RedditPostData>()
-            postAdapter.setNewItemsList(savedRedditPosts)
+            // Якщо список непустий (true)
+            if(savedInstanceState.getBoolean(LOAD_STATE_KEY)) {
+                val savedRedditPosts =  savedInstanceState.getParcelableArrayList<RedditPostData>(LIST_STATE_KEY)?.toMutableList() ?: mutableListOf<RedditPostData>()
+                postAdapter.setNewItemsList(savedRedditPosts)
+            }
+            // Якщо список пустий (false)
+            else {
+                loadData()
+            }
         }
 
     }
@@ -91,6 +99,8 @@ class MainActivity : AppCompatActivity(), ViewHolderPostListener {
 
         val redditPostsList = postAdapter.getList()
         outState.putParcelableArrayList(LIST_STATE_KEY, ArrayList(redditPostsList))
+
+        outState.putBoolean(LOAD_STATE_KEY, postAdapter.getList().isNotEmpty())
     }
 
     private fun loadData(redditPostConfig: RedditPostParams = RedditPostParams()) {
@@ -113,6 +123,7 @@ class MainActivity : AppCompatActivity(), ViewHolderPostListener {
 
         }
     }
+
 
     // Відкриває картинку у браузері
     override fun onThumbnailClick(thumbnailUrl: String) {
