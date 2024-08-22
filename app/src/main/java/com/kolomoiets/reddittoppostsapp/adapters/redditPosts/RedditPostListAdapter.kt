@@ -1,4 +1,4 @@
-package com.kolomoiets.reddittoppostsapp.adapters
+package com.kolomoiets.reddittoppostsapp.adapters.redditPosts
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import com.kolomoiets.reddittoppostsapp.data.RedditPostData
 import com.kolomoiets.reddittoppostsapp.databinding.ItemRedditPostBinding
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import java.lang.Exception
 
 class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPostData, RedditPostListAdapter.PostViewHolder>(Comparator()) {
     private var postListData = mutableListOf<RedditPostData>()
@@ -73,6 +72,3 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
     }
 }
 
-interface RedditPostListener {
-    fun onThumbnailClick(thumbnailUrl: String)
-}
