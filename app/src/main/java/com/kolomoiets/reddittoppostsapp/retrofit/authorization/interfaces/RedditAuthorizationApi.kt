@@ -1,13 +1,13 @@
-package com.kolomoiets.reddittoppostsapp.retrofit
+package com.kolomoiets.reddittoppostsapp.retrofit.authorization.interfaces
 
-import com.kolomoiets.reddittoppostsapp.retrofit.authorization.AuthResponseData
+import com.kolomoiets.reddittoppostsapp.retrofit.authorization.data.AuthResponseData
 import retrofit2.Call
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Header
 import retrofit2.http.POST
 
-interface RedditAuthorization {
+interface RedditAuthorizationApi {
     @FormUrlEncoded
     @POST("api/v1/access_token")
     fun authorization(

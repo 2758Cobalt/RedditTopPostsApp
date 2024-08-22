@@ -1,4 +1,4 @@
-package com.kolomoiets.reddittoppostsapp.retrofit.authorization
+package com.kolomoiets.reddittoppostsapp.retrofit.authorization.data
 
 import com.google.gson.annotations.SerializedName
 
