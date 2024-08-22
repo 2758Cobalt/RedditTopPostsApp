@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.kolomoiets.reddittoppostsapp.RedditTimeFormatter
 import com.kolomoiets.reddittoppostsapp.data.RedditPostData
 import com.kolomoiets.reddittoppostsapp.databinding.ItemRedditPostBinding
 import com.squareup.picasso.Callback
@@ -14,6 +15,7 @@ import com.squareup.picasso.Picasso
 
 class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPostData, RedditPostListAdapter.PostViewHolder>(Comparator()) {
     private var postListData = mutableListOf<RedditPostData>()
+    private var timeFormatter = RedditTimeFormatter(context)
 
     private var picassoInstance = Picasso.Builder(context).build()
     private var redditPostListener: ViewHolderPostListener? = null
@@ -44,7 +46,7 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
                             override fun onError(e: Exception?) { }
                         })
 
-
+                    postCreatedTime.text = timeFormatter.formatTime(createdTime)
                     postThumbnailCard.setOnClickListener { redditPostListener?.onThumbnailClick(thumbnailUrl) }
                 }
             }
