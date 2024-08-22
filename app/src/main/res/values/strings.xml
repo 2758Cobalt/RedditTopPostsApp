@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">RedditTopPostsApp</string>
+
+    <string name="main_actionBar_title" translatable="false">Top</string>
+
+
+    <string name="post_authorName">author</string>
+    <string name="post_dateTime">• %1d %2s ago</string>
 </resources>
