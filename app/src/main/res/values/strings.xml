@@ -5,5 +5,7 @@
 
 
     <string name="post_authorName">author</string>
+
     <string name="post_dateTime">• %1d %2s ago</string>
+    <string name="post_justNow">just now</string>
 </resources>
