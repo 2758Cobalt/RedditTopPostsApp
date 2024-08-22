@@ -1,5 +1,5 @@
 package com.kolomoiets.reddittoppostsapp.adapters.redditPosts
 
-interface RedditPostListener {
+interface ViewHolderPostListener {
     fun onThumbnailClick(thumbnailUrl: String)
 }

@@ -16,7 +16,7 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
     private var postListData = mutableListOf<RedditPostData>()
 
     private var picassoInstance = Picasso.Builder(context).build()
-    private var redditPostListener: RedditPostListener? = null
+    private var redditPostListener: ViewHolderPostListener? = null
 
     class Comparator: DiffUtil.ItemCallback<RedditPostData>() {
         override fun areItemsTheSame(oldItem: RedditPostData, newItem: RedditPostData): Boolean {
@@ -52,7 +52,7 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
     }
 
     // Setup RedditPostListener
-    fun setNewListener(listener: RedditPostListener) {
+    fun setNewListener(listener: ViewHolderPostListener) {
         this.redditPostListener = listener
     }
 
