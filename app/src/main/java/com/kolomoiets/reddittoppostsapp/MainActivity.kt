@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity(), ViewHolderPostListener {
     private lateinit var postAdapter: RedditPostListAdapter
     private lateinit var postManager: RedditManager
 
+    private val LIST_STATE_KEY = "reddit_post_list_state"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -62,6 +64,19 @@ class MainActivity : AppCompatActivity(), ViewHolderPostListener {
         if (savedInstanceState == null) {
             loadData()
         }
+        // Завантаження збереженого списку елементів і застовування їх у RecyclerView
+        else {
+            val savedRedditPosts =  savedInstanceState.getParcelableArrayList<RedditPostData>(LIST_STATE_KEY)?.toMutableList() ?: mutableListOf<RedditPostData>()
+            postAdapter.setNewItemsList(savedRedditPosts)
+        }
+    }
+
+    // Збереження списку елементів у RecyclerView
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        val redditPostsList = postAdapter.getList()
+        outState.putParcelableArrayList(LIST_STATE_KEY, ArrayList(redditPostsList))
     }
 
     private fun loadData(redditPostConfig: RedditPostParams = RedditPostParams()) {
