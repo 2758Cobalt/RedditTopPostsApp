@@ -63,8 +63,7 @@ class MainActivity : AppCompatActivity(), ViewHolderPostListener {
         binding.recyclerViewMain.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1)) {
-                    Log.i(LOG_TAG, postAdapter.getLastItemId())
+                if (!recyclerView.canScrollVertically(1) && postAdapter.getList().isNotEmpty()) {
                     loadData(
                         RedditPostParams(
                         afterNameId = postAdapter.getLastItemId(),
