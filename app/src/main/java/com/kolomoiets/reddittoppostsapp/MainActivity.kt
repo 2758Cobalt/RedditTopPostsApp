@@ -19,7 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ViewHolderPostListener {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var postAdapter: RedditPostListAdapter
@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity() {
 
         postManager = RedditManager()
         postAdapter = RedditPostListAdapter(this)
+
+        postAdapter.setNewListener(this)
 
         binding.recyclerViewMain.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadData(redditPostConfig: RedditPostParams = RedditPostParams()) {
-        binding.updatingProgressMain.apply{
+        binding.updatingProgressMain.apply {
             isVisible = true
             isIndeterminate = true
         }
@@ -72,9 +74,7 @@ class MainActivity : AppCompatActivity() {
             val response = postManager.getTopPosts(redditPostConfig)
 
             runOnUiThread {
-                postAdapter.addItemListData(
-                    parsePostResponse(response!!)
-                )
+                postAdapter.addItemToListAdapter(response!!)
 
                 binding.updatingProgressMain.apply {
                     isVisible = false
@@ -85,25 +85,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun parsePostResponse(postResponse: PostResponse): MutableList<RedditPostData> {
-        val dataList = mutableListOf<RedditPostData>()
-
-        for (item in postResponse.data.children) {
-            dataList.add(
-                RedditPostData(
-                    item.data.author,
-                    item.data.title,
-                    item.data.name,
-                    item.data.created_utc,
-                    item.data.thumbnail,
-                    item.data.num_comments
-                )
-            )
+    // Відкриває картинку у браузері
+    override fun onThumbnailClick(thumbnailUrl: String) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(thumbnailUrl)
         }
-
-        return dataList
+        startActivity(intent)
     }
 
 
-
+    companion object {
+        const val LOG_TAG = "MainActivityTag"
+    }
 }
