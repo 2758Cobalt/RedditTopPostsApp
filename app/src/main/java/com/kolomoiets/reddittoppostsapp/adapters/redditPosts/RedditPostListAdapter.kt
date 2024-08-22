@@ -1,6 +1,8 @@
 package com.kolomoiets.reddittoppostsapp.adapters.redditPosts
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import com.kolomoiets.reddittoppostsapp.data.RedditPostData
 import com.kolomoiets.reddittoppostsapp.databinding.ItemRedditPostBinding
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import java.lang.Exception
 
 class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPostData, RedditPostListAdapter.PostViewHolder>(Comparator()) {
     private var postListData = mutableListOf<RedditPostData>()
@@ -44,12 +47,22 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
                     picassoInstance
                         .load(thumbnailUrl)
                         .into(postThumbnail, object : Callback {
-                            override fun onSuccess() { postThumbnailCard.isVisible = true }
-                            override fun onError(e: Exception?) { postThumbnailCard.isVisible = false }
+
+                            override fun onSuccess() {
+                                postThumbnailCard.isVisible = true
+                                postButtonSaveToGallery.isVisible = true
+                            }
+                            override fun onError(e: Exception?) {
+                                postThumbnailCard.isVisible = false
+                                postButtonSaveToGallery.isVisible = false
+                            }
                         })
+
+
 
                     postCreatedTime.text = timeFormatter.formatTime(createdTime)
                     postThumbnailCard.setOnClickListener { redditPostListener?.onThumbnailClick(thumbnailUrl) }
+                    postButtonSaveToGallery.setOnClickListener { redditPostListener?.actionSaveToGallery(thumbnailUrl)}
                 }
             }
         }
@@ -63,6 +76,7 @@ class RedditPostListAdapter(private val context: Context): ListAdapter<RedditPos
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = ItemRedditPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         binding.postThumbnailCard.isVisible = false
+        binding.postButtonSaveToGallery.isVisible = false
         return PostViewHolder(binding)
     }
 
