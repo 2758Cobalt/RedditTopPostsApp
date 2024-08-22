@@ -2,7 +2,7 @@ package com.kolomoiets.reddittoppostsapp.retrofit.authorization
 
 import android.util.Base64
 import android.util.Log
-import com.kolomoiets.reddittoppostsapp.fileStream.AuthConfig
+import com.kolomoiets.reddittoppostsapp.AuthConfig
 import com.kolomoiets.reddittoppostsapp.retrofit.authorization.data.AuthRequestData
 import com.kolomoiets.reddittoppostsapp.retrofit.authorization.data.AuthResponseData
 import com.kolomoiets.reddittoppostsapp.retrofit.authorization.interfaces.RedditAuthorizationApi
@@ -11,13 +11,9 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.FileInputStream
-import java.util.Properties
 
 class RedditAuthorizationManager: RedditAuthorizationListener {
-    protected var baseUrl : String = "https://www.reddit.com/"
-
-    private var authConfig: AuthRequestData = AuthConfig().getAuthConfig()
+    private var authConfig: AuthRequestData
     private var authResponseData: AuthResponseData? = null
     private var redditAuthorizationAPI : RedditAuthorizationApi
 
@@ -31,13 +27,18 @@ class RedditAuthorizationManager: RedditAuthorizationListener {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(AuthConfig.baseURL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(clientHttp)
             .build()
 
         redditAuthorizationAPI = retrofit.create(RedditAuthorizationApi::class.java)
 
+        authConfig = AuthRequestData(
+            AuthConfig.grantType,
+            AuthConfig.username,
+            AuthConfig.password
+        )
     }
 
     override suspend fun authorization(): AuthResponseData? {
